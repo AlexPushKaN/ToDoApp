@@ -28,18 +28,18 @@ class CoreDataService: CoreDataServiceProtocol {
         return persistentContainer.viewContext
     }
     
-    // MARK: - Save multiple todos (for initial API load)
+    // MARK: - Сохранение нескольких задач (для первоначальной загрузки API)
     func saveTodos(_ todos: [TodoModel], completion: @escaping (Result<Void, Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
         
         backgroundContext.perform {
             do {
-                // Clear existing todos first (for initial load)
+                // Производим очистку хранилища от существующих задач (для первоначальной загрузки, на всякий случай)
                 let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoEntity.fetchRequest()
                 let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
                 try backgroundContext.execute(deleteRequest)
                 
-                // Save new todos
+                // Сохраняем новые задачи
                 for todoModel in todos {
                     let entity = TodoEntity(context: backgroundContext)
                     self.updateEntity(entity, with: todoModel)
@@ -58,7 +58,7 @@ class CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    // MARK: - Fetch all todos
+    // MARK: - Получить все задачи
     func fetchTodos(completion: @escaping (Result<[TodoModel], Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
         
@@ -82,7 +82,7 @@ class CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    // MARK: - Save single todo
+    // MARK: - Сохранить одну задачу
     func saveTodo(_ todo: TodoModel, completion: @escaping (Result<Void, Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
         
@@ -104,7 +104,7 @@ class CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    // MARK: - Update todo
+    // MARK: - Обновить список задач
     func updateTodo(_ todo: TodoModel, completion: @escaping (Result<Void, Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
         
@@ -135,7 +135,7 @@ class CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    // MARK: - Delete todo
+    // MARK: - Удалить задачу
     func deleteTodo(withId id: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
         
@@ -166,7 +166,7 @@ class CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    // MARK: - Search todos
+    // MARK: - Поиск задач
     func searchTodos(with query: String, completion: @escaping (Result<[TodoModel], Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
         
@@ -197,7 +197,7 @@ class CoreDataService: CoreDataServiceProtocol {
         }
     }
     
-    // MARK: - Helper method to update entity
+    // MARK: - Вспомогательный метод для обновления сущности задачи
     private func updateEntity(_ entity: TodoEntity, with todo: TodoModel) {
         entity.id = todo.id
         entity.title = todo.title
