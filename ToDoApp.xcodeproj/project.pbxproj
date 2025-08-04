@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4DBAE0862E40B009009A680D /* TodoModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4DBAE07C2E40AC9E009A680D /* TodoModel.xcdatamodeld */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		4D0A25032E4085F9004C468F /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DBAE07D2E40AC9E009A680D /* TodoModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TodoModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		4D0A24FA2E4085F9004C468F = {
 			isa = PBXGroup;
 			children = (
+				4DBAE07C2E40AC9E009A680D /* TodoModel.xcdatamodeld */,
 				4D0A25052E4085F9004C468F /* ToDoApp */,
 				4D0A25042E4085F9004C468F /* Products */,
 			);
@@ -132,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DBAE0862E40B009009A680D /* TodoModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +352,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4DBAE07C2E40AC9E009A680D /* TodoModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4DBAE07D2E40AC9E009A680D /* TodoModel.xcdatamodel */,
+			);
+			currentVersion = 4DBAE07D2E40AC9E009A680D /* TodoModel.xcdatamodel */;
+			path = TodoModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 4D0A24FB2E4085F9004C468F /* Project object */;
 }
