@@ -30,6 +30,7 @@ extension TodoListPresenter: TodoListPresenterInputProtocol {
     
     func didSelectTodo(_ todo: TodoModel) {
         guard let view = view else { return }
+        router?.presentTodoDetailScreen(from: view, for: todo)
     }
     
     func addTodo() {

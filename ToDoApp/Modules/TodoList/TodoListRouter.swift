@@ -50,6 +50,15 @@ extension TodoListRouter: TodoListRouterInputProtocol {
     
     func presentTodoDetailScreen(from view: TodoListViewProtocol, for todo: TodoModel) {
         guard let viewController = viewController else { return }
+        
+        let detailModule = TaskDetailRouter.createModule(with: todo)
+        
+        if let detailVC = detailModule as? TaskDetailViewController,
+           let presenter = (view as? TodoListViewController)?.presenter {
+            detailVC.delegate = TaskDetailDelegate(presenter: presenter)
+        }
+        
+        viewController.navigationController?.pushViewController(detailModule, animated: true)
     }
 }
 
@@ -63,5 +72,17 @@ class AddTaskDelegate: AddTaskViewControllerDelegate {
     
     func didAddTodo(_ todo: TodoModel) {
         presenter?.didAddTodo(todo)
+    }
+}
+
+class TaskDetailDelegate: TaskDetailViewControllerDelegate {
+    weak var presenter: TodoListPresenterInputProtocol?
+    
+    init(presenter: TodoListPresenterInputProtocol) {
+        self.presenter = presenter
+    }
+    
+    func didUpdateTodo(_ todo: TodoModel) {
+        presenter?.didUpdateTodo(todo)
     }
 }

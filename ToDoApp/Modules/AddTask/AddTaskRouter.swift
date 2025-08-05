@@ -34,8 +34,10 @@ extension AddTaskRouter: AddTaskRouterInputProtocol {
     }
 
     func dismissView() {
+        guard let viewController = viewController else { return }
+        
         DispatchQueue.main.async {
-            self.viewController?.dismiss(animated: true)
+            viewController.dismiss(animated: true)
         }
     }
 }

@@ -62,4 +62,5 @@ protocol TodoListRouterInputProtocol: AnyObject {
     static func createModule() -> UIViewController
     
     func presentAddTodoScreen(from view: TodoListViewProtocol)
+    func presentTodoDetailScreen(from view: TodoListViewProtocol, for todo: TodoModel)
 }
