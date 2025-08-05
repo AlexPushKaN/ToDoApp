@@ -83,6 +83,18 @@ extension TodoListPresenter: TodoListPresenterInputProtocol {
         showListAndAmountUnfinishedTasks(todosToShow)
     }
     
+    func didTapEditAction(for todo: TodoModel) {
+        print(#function)
+    }
+    
+    func didTapShareAction(for todo: TodoModel) {
+        print(#function)
+    }
+    
+    func didTapDeleteAction(for todo: TodoModel) {
+        print(#function)
+    }
+    
     // MARK: - Private Methods
     private func updateTodoInArrays(_ updatedTodo: TodoModel) {
         // Обновляем задачу в основном массиве

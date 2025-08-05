@@ -17,7 +17,8 @@ class TodoListViewController: UIViewController {
 
     // MARK: - VIPER
     var presenter: TodoListPresenterInputProtocol?
-
+    var actionMenuService: ActionMenuPresenting?
+    
     // MARK: - Data
     private var todos: [TodoModel] = []
     
@@ -252,5 +253,49 @@ extension TodoListViewController: TodoTableViewCellDelegate {
             userId: todo.userId
         )
         presenter?.didUpdateTodo(updatedTodo)
+    }
+}
+
+// MARK: - Жест длительного нажатия для вызова taskSpotlightView с меню опций
+extension TodoListViewController {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        tableView.addGestureRecognizer(longPressGesture)
+    }
+
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return }
+        let point = gesture.location(in: tableView)
+
+        guard let indexPath = tableView.indexPathForRow(at: point),
+              let cell = tableView.cellForRow(at: indexPath) as? TodoTableViewCell else { return }
+
+        let todo = todos[indexPath.row]
+        
+        // Поскольку мы находимся в стеке навигатора, чтобы заблюрить весь экран, берем view navigationControllerа
+        guard let containerView = navigationController?.view else { return }
+        actionMenuService?.showMenu(
+            for: cell,
+            with: TodoInfo(title: todo.title, taskDescription: todo.taskDescription, createdAt: todo.createdAt),
+            in: containerView,
+            withActions: [
+                ActionMenuItem(title: "Редактировать", icon: UIImage(systemName: "square.and.pencil"), type: .edit, style: .normal),
+                ActionMenuItem(title: "Поделиться", icon: UIImage(systemName: "square.and.arrow.up"), type: .share, style: .normal),
+                ActionMenuItem(title: "Удалить", icon: UIImage(systemName: "trash"), type: .delete, style: .destructive),
+            ]
+        ) { [weak self] selected in
+            guard let self = self else { return }
+
+            switch selected {
+            case .edit:
+                self.presenter?.didTapEditAction(for: todo)
+            case .share:
+                self.presenter?.didTapShareAction(for: todo)
+            case .delete:
+                self.presenter?.didTapDeleteAction(for: todo)
+            }
+        }
     }
 }

@@ -33,6 +33,10 @@ protocol TodoListPresenterInputProtocol: AnyObject {
     func didUpdateTodo(_ todo: TodoModel)
     func didAddTodo(_ todo: TodoModel)
     func didDeleteTodo(withId id: Int64)
+    
+    func didTapEditAction(for todo: TodoModel)
+    func didTapShareAction (for todo: TodoModel)
+    func didTapDeleteAction(for todo: TodoModel)
 }
 
 // MARK: Interactor Input

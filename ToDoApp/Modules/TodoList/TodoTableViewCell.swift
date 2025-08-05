@@ -95,7 +95,7 @@ class TodoTableViewCell: UITableViewCell {
             stackView.leadingAnchor.constraint(equalTo: checkboxButton.trailingAnchor, constant: 12),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
         ])
     }
     
@@ -139,7 +139,7 @@ class TodoTableViewCell: UITableViewCell {
         }
     }
     
-    // MARK: - Акшены
+    // MARK: - Экшены
     @objc private func checkboxTapped() {
         guard let todo = todo else { return }
         delegate?.didTapCheckbox(for: todo)

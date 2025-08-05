@@ -23,6 +23,7 @@ extension TodoListRouter: TodoListRouterInputProtocol {
         
         // Инъекция зависимостей
         view.presenter = presenter
+        view.actionMenuService = ActionMenuService()
         presenter.view = view
         presenter.interactor = interactor
         presenter.router = router
