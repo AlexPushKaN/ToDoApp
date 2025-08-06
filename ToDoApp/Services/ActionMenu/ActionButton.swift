@@ -30,7 +30,7 @@ final class ActionButton: UIButton {
         config.image = item.icon
         config.imagePlacement = .trailing
         config.imagePadding = 0
-        config.baseForegroundColor = item.style == .destructive ? .systemRed : .systemBackground
+        config.baseForegroundColor = item.style == .destructive ? .systemRed : .darkText
         config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
         config.titleAlignment = .leading
 

@@ -60,6 +60,8 @@ extension TodoListPresenter: TodoListPresenterInputProtocol {
         // Показываем обновленные задачи и количество не выполненных задач
         let todosToShow = isSearching ? filteredTodos : allTodos
         showListAndAmountUnfinishedTasks(todosToShow)
+        
+        interactor?.updateTodo(todo)
     }
     
     func didAddTodo(_ todo: TodoModel) {
