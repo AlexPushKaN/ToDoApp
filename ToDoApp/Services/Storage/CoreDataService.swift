@@ -20,44 +20,48 @@ protocol CoreDataServiceProtocol {
 
 class CoreDataService: CoreDataServiceProtocol {
     
-    private var persistentContainer: NSPersistentContainer {
-        return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    }
-    
-    private var context: NSManagedObjectContext {
-        return persistentContainer.viewContext
-    }
-    
-    // MARK: - Сохранение нескольких задач (для первоначальной загрузки API)
-    func saveTodos(_ todos: [TodoModel], completion: @escaping (Result<Void, Error>) -> Void) {
-        let backgroundContext = persistentContainer.newBackgroundContext()
-        
-        backgroundContext.perform {
-            do {
-                // Производим очистку хранилища от существующих задач (для первоначальной загрузки, на всякий случай)
-                let fetchRequest: NSFetchRequest<NSFetchRequestResult> = TodoEntity.fetchRequest()
-                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                try backgroundContext.execute(deleteRequest)
-                
-                // Сохраняем новые задачи
-                for todoModel in todos {
-                    let entity = TodoEntity(context: backgroundContext)
-                    self.updateEntity(entity, with: todoModel)
-                }
-                
-                try backgroundContext.save()
-                
-                DispatchQueue.main.async {
-                    completion(.success(()))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
+    private let persistentContainer: NSPersistentContainer
+
+    // MARK: - Инициализация
+    init(container: NSPersistentContainer? = nil) {
+        if let externalContainer = container {
+            self.persistentContainer = externalContainer
+        } else {
+            self.persistentContainer = NSPersistentContainer(name: "TodoModel")
+            self.persistentContainer.loadPersistentStores { description, error in
+                if let error = error {
+                    fatalError("Core Data stack failed to load: \(error)")
                 }
             }
         }
     }
     
+    // MARK: - Сохранение нескольких задач (для первоначальной загрузки API)
+    func saveTodos(_ todos: [TodoModel], completion: @escaping (Result<Void, Error>) -> Void) {
+        let context = persistentContainer.newBackgroundContext()
+        
+        context.perform {
+            do {
+                // Производим очистку хранилища от существующих задач (для первоначальной загрузки, на всякий случай)
+                let fetchRequest: NSFetchRequest<TodoEntity> = TodoEntity.fetchRequest()
+                let existingTodos = try context.fetch(fetchRequest)
+                existingTodos.forEach { context.delete($0) }
+
+                // Сохраняем новые задачи
+                for todoModel in todos {
+                    let entity = TodoEntity(context: context)
+                    self.updateEntity(entity, with: todoModel)
+                }
+
+                try context.save()
+                DispatchQueue.main.async { completion(.success(())) }
+
+            } catch {
+                DispatchQueue.main.async { completion(.failure(error)) }
+            }
+        }
+    }
+
     // MARK: - Получить все задачи
     func fetchTodos(completion: @escaping (Result<[TodoModel], Error>) -> Void) {
         let backgroundContext = persistentContainer.newBackgroundContext()
