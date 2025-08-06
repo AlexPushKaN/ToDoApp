@@ -55,8 +55,8 @@ protocol TodoListInteractorInputProtocol: AnyObject {
 protocol TodoListInteractorOutputProtocol: AnyObject {
     func didFetchTodos(_ todos: [TodoModel])
     func didFailToFetchTodos(withError error: Error)
-    func didDeleteTodo(withId id: Int64)
-    func didFailToDeleteTodo(withError error: Error)
+    func didDeleteTodoOutput(withId id: Int64)
+    func didFailToDeleteTodoOutput(withError error: Error)
     func didSearchTodos(_ todos: [TodoModel])
     func didFailToSearchTodos(withError error: Error)
 }

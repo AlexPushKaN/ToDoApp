@@ -84,7 +84,8 @@ extension TodoListPresenter: TodoListPresenterInputProtocol {
     }
     
     func didTapEditAction(for todo: TodoModel) {
-        print(#function)
+        guard let view = view else { return }
+        router?.presentTodoDetailScreen(from: view, for: todo)
     }
     
     func didTapShareAction(for todo: TodoModel) {
@@ -92,7 +93,7 @@ extension TodoListPresenter: TodoListPresenterInputProtocol {
     }
     
     func didTapDeleteAction(for todo: TodoModel) {
-        print(#function)
+        deleteTodo(todo)
     }
     
     // MARK: - Private Methods
@@ -135,7 +136,7 @@ extension TodoListPresenter: TodoListInteractorOutputProtocol {
         didDeleteTodo(withId: id)
     }
     
-    func didFailToDeleteTodo(withError error: Error) {
+    func didFailToDeleteTodoOutput(withError error: Error) {
         view?.hideLoading()
         view?.showErrorMessage("Не удалось удалить задачу: \(error.localizedDescription)")
     }

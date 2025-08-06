@@ -55,9 +55,9 @@ extension TodoListInteractor: TodoListInteractorInputProtocol {
         coreDataService?.deleteTodo(withId: todo.id) { [weak self] result in
             switch result {
             case .success:
-                self?.presenter?.didDeleteTodo(withId: todo.id)
+                self?.presenter?.didDeleteTodoOutput(withId: todo.id)
             case .failure(let error):
-                self?.presenter?.didFailToDeleteTodo(withError: error)
+                self?.presenter?.didFailToDeleteTodoOutput(withError: error)
             }
         }
     }

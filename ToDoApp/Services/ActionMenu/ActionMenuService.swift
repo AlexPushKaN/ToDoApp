@@ -42,10 +42,6 @@ protocol ActionMenuPresenting: AnyObject {
     func dismissMenu()
 }
 
-final class ActionButton: UIButton {
-    var actionType: ActionMenuItemType?
-}
-
 final class ActionMenuService: ActionMenuPresenting {
 
     private var blurView: UIVisualEffectView?
@@ -137,28 +133,12 @@ final class ActionMenuService: ActionMenuPresenting {
         container.backgroundColor = AppColors.actionMenuBackground
 
         for (index, item) in actions.enumerated() {
-            let button = ActionButton(type: .system)
-            button.actionType = item.type
-
-            var config = UIButton.Configuration.plain()
-            config.title = item.title
-            config.image = item.icon
-            config.imagePlacement = .trailing
-            config.imagePadding = 0
-            config.baseForegroundColor = item.style == .destructive ? .systemRed : .systemBackground
-            config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
-            config.titleAlignment = .leading
-
-            button.configuration = config
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            button.contentHorizontalAlignment = .fill
-            button.addTarget(self, action: #selector(menuActionTapped(_:)), for: .touchUpInside)
-
+            let button = ActionButton(menuItem: item, target: self, action: #selector(menuActionTapped(_:)))
             container.addArrangedSubview(button)
 
             if index < actions.count - 1 {
                 let separator = UIView()
-                separator.backgroundColor = UIColor.systemGray4.withAlphaComponent(0.5)
+                separator.backgroundColor = AppColors.secondaryText.withAlphaComponent(0.8)
                 separator.translatesAutoresizingMaskIntoConstraints = false
                 separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
                 container.addArrangedSubview(separator)
@@ -182,12 +162,26 @@ final class ActionMenuService: ActionMenuPresenting {
         container.layer.cornerRadius = 12
         container.clipsToBounds = true
 
-        let titleLabel = makeLabel(text: info.title, font: .boldSystemFont(ofSize: 17), color: AppColors.primaryText)
-        let descriptionLabel = makeLabel(text: info.taskDescription ?? "", font: .systemFont(ofSize: 15), color: AppColors.primaryText)
+        let titleLabel = makeLabel(
+            text: info.title,
+            font: .boldSystemFont(ofSize: 17),
+            line: 1,
+            color: AppColors.primaryText
+        )
+        let descriptionLabel = makeLabel(
+            text: info.taskDescription ?? "",
+            font: .systemFont(ofSize: 15),
+            line: 3, color: AppColors.primaryText
+        )
         
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yy"
-        let dateLabel = makeLabel(text: formatter.string(from: info.createdAt), font: .systemFont(ofSize: 13), color: .gray)
+        let dateLabel = makeLabel(
+            text: formatter.string(from: info.createdAt),
+            font: .systemFont(ofSize: 13),
+            line: 1,
+            color: AppColors.secondaryText
+        )
 
         let stack = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, dateLabel])
         stack.axis = .vertical
@@ -208,12 +202,12 @@ final class ActionMenuService: ActionMenuPresenting {
         return container
     }
 
-    private func makeLabel(text: String, font: UIFont, color: UIColor) -> UILabel {
+    private func makeLabel(text: String, font: UIFont, line: Int, color: UIColor) -> UILabel {
         let label = UILabel()
         label.text = text
         label.font = font
         label.textColor = color
-        label.numberOfLines = 0
+        label.numberOfLines = line
         return label
     }
 
